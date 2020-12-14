@@ -1,10 +1,32 @@
 <!doctype html>
 <html>
 <head>
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imageboard</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+    <header>
+        <h1>{{ heading }}</h1>
+    </header>
+
+    <main v-cloak>
+        <h2>{{ heading }}</h2>
+        <div class="container">
+            <div class="card" v-for="image in images">
+                <img :src="image.url" :alt="image.title">
+                <div class="description">{{ image.title }}</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &#169; My Imageboard | 2020
+    </footer>
+
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 </html>
