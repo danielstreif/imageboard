@@ -7,3 +7,11 @@ const db = spicedPg(
 module.exports.getImages = () => {
     return db.query(`SELECT * FROM images`);
 };
+
+module.exports.uploadImage = (params) => {
+    return db.query(
+        `INSERT INTO images (title, description, username, url)
+    VALUES ($1, $2, $3, $4)`,
+        params
+    );
+};
