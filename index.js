@@ -39,6 +39,17 @@ app.get("/images", (req, res) => {
         });
 });
 
+app.get("/active-image/*", (req, res) => {
+    const id = req.params[0];
+    db.getSingleImage(id)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
 app.post("/upload", uploader.single("image"), s3.upload, (req, res) => {
     if (req.file) {
         const data = req.body;

@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>{{ heading }}</h1>
+        <h1>Image Board</h1>
     </header>
 
     <main v-cloak>
@@ -30,12 +30,31 @@
 
         <h2>{{ headingImages }}</h2>
         <div class="container">
-            <div class="card" v-for="image in images">
+            <div class="card" v-for="image in images" @click="openModal(image.id)">
                 <img :src="image.url" :alt="image.title">
                 <div class="description">{{ image.title }}</div>
             </div>
         </div>
+
+        <modal 
+            v-if="modalActive"
+            :id="modalActive"
+            @close="hideModal"
+        ></modal>
     </main>
+
+    <script id="template" type="text/x-template">
+        <div class="modal" :image-id="id">
+            <div class="modal-card">
+                <img :src="image.url" :alt="image.title">
+                <h3>{{ image.title }}</h3>
+                <p>{{ image.description }}</p>
+                <p>{{ image.username }} {{ image.created_at }}</p>
+                <h4 @click="closeModal">close</h4>
+            </div>
+        </div>
+    </script>
+
 
     <footer>
         &#169; My Imageboard | 2020
