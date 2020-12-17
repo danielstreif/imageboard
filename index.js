@@ -43,6 +43,31 @@ app.get("/active-image/*", (req, res) => {
     const id = req.params[0];
     db.getSingleImage(id)
         .then(({ rows }) => {
+            rows[0].time = rows[0].created_at.toLocaleString();
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/prev-image/*", (req, res) => {
+    const id = req.params[0];
+    db.getPreviousImage(id)
+        .then(({ rows }) => {
+            rows[0].time = rows[0].created_at.toLocaleString();
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/next-image/*", (req, res) => {
+    const id = req.params[0];
+    db.getNextImage(id)
+        .then(({ rows }) => {
+            rows[0].time = rows[0].created_at.toLocaleString();
             res.json(rows);
         })
         .catch((err) => {
@@ -56,7 +81,8 @@ app.post("/upload", uploader.single("image"), s3.upload, (req, res) => {
         data.url = `${s3Url}${req.file.filename}`;
         const params = Object.values(data);
         db.uploadImage(params)
-            .then(() => {
+            .then(({ rows }) => {
+                data.id = rows[0].id;
                 res.json(data);
             })
             .catch((err) => {

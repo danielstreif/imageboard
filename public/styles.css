@@ -7,6 +7,7 @@
 body {
     position: relative;
     padding: 20px 30px 10px 30px;
+    min-height: 100vh;
 }
 
 h1 {
@@ -31,10 +32,14 @@ form {
 form button {
     font-size: medium;
     margin-left: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    cursor: pointer;
 }
 
 input {
     font-size: medium;
+    margin-right: 10px;
 }
 
 .input-file {
@@ -49,12 +54,16 @@ input {
 .input-file + label {
     border: 1px solid lightgray;
     border-radius: 4px;
-    padding: 0 10px 0 10px;
+    padding: 1px 10px 1px 10px;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    width: 150px;
 }
 
-.input-file:focus + label,
-.input-file + label:hover {
-    background-color: lightgray;
+.input-file:focus + label {
+    outline: 3px solid lightblue;
+    outline: -webkit-focus-ring-color auto 5px;
 }
 
 .container {
@@ -71,6 +80,11 @@ input {
     margin: 0 20px 50px 20px;
     border: 1px gray solid;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.card:hover {
+    background-color: rgba(99, 99, 99, 0.1);
 }
 
 .card img {
@@ -92,21 +106,36 @@ input {
 }
 
 .modal-card {
+    width: 520px;
     position: fixed;
     display: grid;
     justify-self: center;
     background-color: whitesmoke;
-    border: 1px gray solid;
     border-radius: 5px;
     padding: 10px;
     z-index: 2;
-    top: 20%;
+    top: 15%;
 }
 
 .modal-card img {
-    max-width: 400px;
-    height: auto;
+    width: 500px;
     border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: small;
+}
+
+.modal-button {
+    cursor: pointer;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 80px;
+    text-align: center;
+    padding: 0 1px 0 1px;
 }
 
 footer {
@@ -120,12 +149,19 @@ footer {
         display: grid;
         grid-template-columns: 1fr;
         width: 60%;
+        margin-bottom: 0;
+    }
+    input {
+        margin-bottom: 10px;
     }
     .input-file + label {
         margin-bottom: 15px;
+        width: 185px;
+        max-width: 185px;
     }
     form button {
         margin-left: 0;
+        width: 120px;
     }
     .container {
         grid-template-columns: 1fr;

@@ -5,7 +5,9 @@ const db = spicedPg(
 );
 
 module.exports.getImages = () => {
-    return db.query(`SELECT * FROM images`);
+    return db.query(`SELECT * FROM images
+    ORDER BY id DESC
+    LIMIT 6`);
 };
 
 module.exports.getSingleImage = (id) => {
@@ -19,7 +21,28 @@ module.exports.getSingleImage = (id) => {
 module.exports.uploadImage = (params) => {
     return db.query(
         `INSERT INTO images (title, description, username, url)
-    VALUES ($1, $2, $3, $4)`,
+    VALUES ($1, $2, $3, $4)
+    RETURNING id`,
         params
+    );
+};
+
+module.exports.getPreviousImage = (id) => {
+    return db.query(
+        `SELECT * FROM images
+    WHERE id > $1
+    ORDER BY id ASC
+    LIMIT 1`,
+        [id]
+    );
+};
+
+module.exports.getNextImage = (id) => {
+    return db.query(
+        `SELECT * FROM images
+    WHERE id < $1
+    ORDER BY id DESC
+    LIMIT 1`,
+        [id]
     );
 };
