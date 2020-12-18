@@ -62,13 +62,19 @@ input {
 }
 
 .input-file:focus + label {
-    outline: 3px solid lightblue;
-    outline: -webkit-focus-ring-color auto 5px;
+    border: 2px solid #32a1ce;
+    padding: 0 9px 0 9px;
 }
 
-.container {
+.gallery-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+}
+
+.gallery-container a {
+    margin: 0 20px 50px 20px;
+    text-decoration: none;
+    color: black;
 }
 
 .card {
@@ -77,10 +83,8 @@ input {
     align-items: center;
     height: 350px;
     padding: 5px;
-    margin: 0 20px 50px 20px;
     border: 1px gray solid;
     border-radius: 5px;
-    cursor: pointer;
 }
 
 .card:hover {
@@ -92,6 +96,18 @@ input {
     height: 100%;
     object-fit: cover;
     border-radius: 5px;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-bottom: 50px;
+}
+
+.more-button {
+    justify-self: center;
+    cursor: pointer;
+    font-size: medium;
 }
 
 .modal {
@@ -138,6 +154,14 @@ input {
     padding: 0 1px 0 1px;
 }
 
+.popup {
+    z-index: 3;
+}
+
+.popup-card {
+    top: 30%;
+}
+
 footer {
     position: absolute;
     bottom: 0;
@@ -145,6 +169,10 @@ footer {
 }
 
 @media screen and (max-width: 720px) {
+    body {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
     .form-row {
         display: grid;
         grid-template-columns: 1fr;
@@ -163,7 +191,7 @@ footer {
         margin-left: 0;
         width: 120px;
     }
-    .container {
+    .gallery-container {
         grid-template-columns: 1fr;
     }
 }

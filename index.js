@@ -39,6 +39,17 @@ app.get("/images", (req, res) => {
         });
 });
 
+app.get("/request-more/*", (req, res) => {
+    const id = req.params[0];
+    db.getMoreImages(id)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
 app.get("/active-image/*", (req, res) => {
     const id = req.params[0];
     db.getSingleImage(id)
@@ -51,23 +62,24 @@ app.get("/active-image/*", (req, res) => {
         });
 });
 
-app.get("/prev-image/*", (req, res) => {
+app.get("/delete-image/*", (req, res) => {
     const id = req.params[0];
-    db.getPreviousImage(id)
-        .then(({ rows }) => {
-            rows[0].time = rows[0].created_at.toLocaleString();
-            res.json(rows);
+    db.deleteImage(id)
+        .then(() => {
+            res.json({ success: true });
         })
         .catch((err) => {
             console.log(err);
         });
 });
 
-app.get("/next-image/*", (req, res) => {
+app.get("/comments/*", (req, res) => {
     const id = req.params[0];
-    db.getNextImage(id)
+    db.getComments(id)
         .then(({ rows }) => {
-            rows[0].time = rows[0].created_at.toLocaleString();
+            for (let i in rows) {
+                rows[i].time = rows[i].created_at.toLocaleString();
+            }
             res.json(rows);
         })
         .catch((err) => {

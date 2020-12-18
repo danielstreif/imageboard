@@ -4,21 +4,57 @@ const db = spicedPg(
         "postgres:postgres:postgres@localhost:5432/imageboard"
 );
 
-module.exports.getImages = () => {
-    return db.query(`SELECT * FROM images
+exports.getImages = () => {
+    return db.query(`SELECT url, title, id, (
+     SELECT id FROM images
+     ORDER BY id ASC
+     LIMIT 1
+ ) AS "lastId"  FROM images
     ORDER BY id DESC
-    LIMIT 6`);
+    LIMIT 3`);
 };
 
-module.exports.getSingleImage = (id) => {
+exports.getMoreImages = (id) => {
     return db.query(
-        `SELECT * FROM images
+        `SELECT url, title, id, (
+     SELECT id FROM images
+     ORDER BY id ASC
+     LIMIT 1
+ ) AS "lastId"  FROM images
+    WHERE id < $1
+    ORDER BY id DESC
+    LIMIT 3`,
+        [id]
+    );
+};
+
+exports.getSingleImage = (id) => {
+    return db.query(
+        `SELECT *, (
+     SELECT id FROM images
+     WHERE id > $1
+     ORDER BY id ASC
+     LIMIT 1
+ ) AS "prevId", (
+     SELECT id FROM images
+     WHERE id < $1
+     ORDER BY id DESC
+     LIMIT 1
+ ) AS "nextId" FROM images
     WHERE id = $1`,
         [id]
     );
 };
 
-module.exports.uploadImage = (params) => {
+exports.getComments = (id) => {
+    return db.query(
+        `SELECT * FROM comments
+    WHERE id = $1`,
+        [id]
+    );
+};
+
+exports.uploadImage = (params) => {
     return db.query(
         `INSERT INTO images (title, description, username, url)
     VALUES ($1, $2, $3, $4)
@@ -27,22 +63,6 @@ module.exports.uploadImage = (params) => {
     );
 };
 
-module.exports.getPreviousImage = (id) => {
-    return db.query(
-        `SELECT * FROM images
-    WHERE id > $1
-    ORDER BY id ASC
-    LIMIT 1`,
-        [id]
-    );
-};
-
-module.exports.getNextImage = (id) => {
-    return db.query(
-        `SELECT * FROM images
-    WHERE id < $1
-    ORDER BY id DESC
-    LIMIT 1`,
-        [id]
-    );
+exports.deleteImage = (id) => {
+    return db.query(`DELETE FROM images WHERE id = $1`, [id]);
 };

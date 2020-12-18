@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS images CASCADE;
 
 CREATE TABLE images(
     id SERIAL PRIMARY KEY,
@@ -6,6 +6,14 @@ CREATE TABLE images(
     username VARCHAR NOT NULL,
     title VARCHAR NOT NULL,
     description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE comments(
+    id SERIAL PRIMARY KEY,
+    comment TEXT NOT NULL,
+    username VARCHAR NOT NULL,
+    image_id INTEGER NOT NULL REFERENCES images(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
