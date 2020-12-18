@@ -36,6 +36,7 @@ app.get("/images", (req, res) => {
         })
         .catch((err) => {
             console.log(err);
+            res.json({ success: false });
         });
 });
 
@@ -47,6 +48,7 @@ app.get("/request-more/*", (req, res) => {
         })
         .catch((err) => {
             console.log(err);
+            res.json({ success: false });
         });
 });
 
@@ -70,6 +72,7 @@ app.get("/delete-image/*", (req, res) => {
         })
         .catch((err) => {
             console.log(err);
+            res.json({ success: false });
         });
 });
 
@@ -84,6 +87,7 @@ app.get("/comments/*", (req, res) => {
         })
         .catch((err) => {
             console.log(err);
+            res.json({ success: false });
         });
 });
 

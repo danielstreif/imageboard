@@ -1,7 +1,7 @@
 (function () {
     Vue.component("modal", {
         template: "#template",
-        props: ["id"],
+        props: ["id", "modalActive"],
         data: function () {
             return {
                 image: "",
@@ -31,7 +31,6 @@
                         });
                 }
             },
-            // function (this.image) { yourFunctionName(image) }
             nextImage: function () {
                 if (this.image.nextId) {
                     var self = this;
@@ -59,12 +58,13 @@
             modalActive: requestActiveImage,
         },
         created() {
+            var self = this
             window.addEventListener("keydown", function (e) {
                 if (e.key === "ArrowLeft") {
-                    this.prevImage();
+                    self.prevImage();
                 }
                 if (e.key === "ArrowRight") {
-                    this.nextImage();
+                    self.nextImage();
                 }
             });
         },
@@ -193,15 +193,18 @@
                     });
             },
             hideModal: function () {
+                location.hash = "";
                 history.pushState({}, "", "/");
                 this.modalActive = "";
             },
         },
         created() {
+            var self = this;
             window.addEventListener("keydown", function (e) {
-                if (e.key === "Escape" && this.modalActive) {
+                if (e.key === "Escape" && self.modalActive) {
+                    location.hash = "";
                     history.pushState({}, "", "/");
-                    this.modalActive = "";
+                    self.modalActive = "";
                 }
             });
         },

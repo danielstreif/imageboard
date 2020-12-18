@@ -74,8 +74,8 @@
                     <p class="user-info">uploaded by {{ image.username }} on {{ image.time }}</p>
                     <comments :id="modalActive"></comments>
                     <h4 class="modal-button" @click="closeModal">Close</h4>
-                    <h4 class="modal-button" @click="prevImage(image.id)" v-if="previous">Previous</h4>
-                    <h4 class="modal-button" @click="nextImage(image.id)" v-if="next">Next</h4>
+                    <h4 class="modal-button" @click="prevImage" v-if="previous">Previous</h4>
+                    <h4 class="modal-button" @click="nextImage" v-if="next">Next</h4>
                     <h4 class="modal-button" @click="confirmDelete(image.id)">Delete</h4>
                 </div>
                 <popup :id="modalActive" v-if="deleteId"></popup>
