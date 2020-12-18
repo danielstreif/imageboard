@@ -61,7 +61,7 @@
                 </button>
             </div>
 
-            <modal v-if="modalActive" :id="modalActive" @close="hideModal">
+            <modal v-if="modalActive" :id="modalActive" @close="hideModal" @forget="forgetImage(modalActive)">
             </modal>
         </main>
 
@@ -78,7 +78,7 @@
                     <h4 class="modal-button" @click="nextImage" v-if="next">Next</h4>
                     <h4 class="modal-button" @click="confirmDelete(image.id)">Delete</h4>
                 </div>
-                <popup :id="modalActive" v-if="deleteId"></popup>
+                <popup v-if="deleteId" :id="deleteId" @close="hidePopup" @deleted="forgetModal"></popup>
             </div>
         </script>
 

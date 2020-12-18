@@ -61,6 +61,7 @@ app.get("/active-image/*", (req, res) => {
         })
         .catch((err) => {
             console.log(err);
+            res.json({ success: false });
         });
 });
 

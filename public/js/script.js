@@ -50,21 +50,28 @@
             confirmDelete: function (id) {
                 this.deleteId = id;
             },
-            closePopup: function () {
+            hidePopup: function () {
                 this.deleteId = "";
+            },
+            forgetModal: function () {
+                this.$emit("forget");
+                this.$emit("close");
             },
         },
         watch: {
-            modalActive: requestActiveImage,
+            id: requestActiveImage,
         },
         created() {
-            var self = this
+            var self = this;
             window.addEventListener("keydown", function (e) {
                 if (e.key === "ArrowLeft") {
                     self.prevImage();
                 }
                 if (e.key === "ArrowRight") {
                     self.nextImage();
+                }
+                if (e.key === "Escape" && !self.deleteId) {
+                    self.$emit("close");
                 }
             });
         },
@@ -105,14 +112,26 @@
             deleteImage: function () {
                 var self = this;
                 axios
-                    .get("/delete-image/" + this.deleteId)
+                    .get("/delete-image/" + self.id)
                     .then(function () {
-                        self.$emit("close");
+                        self.$emit("deleted");
                     })
                     .catch(function (err) {
                         console.log(err);
                     });
             },
+            closePopup: function () {
+                this.$emit("close");
+            },
+        },
+        created() {
+            var self = this;
+            window.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    e.preventDefault();
+                    self.$emit("close");
+                }
+            });
         },
     });
 
@@ -197,16 +216,15 @@
                 history.pushState({}, "", "/");
                 this.modalActive = "";
             },
-        },
-        created() {
-            var self = this;
-            window.addEventListener("keydown", function (e) {
-                if (e.key === "Escape" && self.modalActive) {
-                    location.hash = "";
-                    history.pushState({}, "", "/");
-                    self.modalActive = "";
+            forgetImage: function (id) {
+                console.log(this.images[0].id);
+                console.log(id);
+                for (var i in this.images) {
+                    if (this.images[i].id == id) {
+                        this.images.splice(i, 1);
+                    }
                 }
-            });
+            },
         },
     });
 
@@ -222,7 +240,7 @@
             })
             .catch(function (err) {
                 console.log(err);
-                this.$emit("close");
+                self.$emit("close");
             });
     }
 })();
