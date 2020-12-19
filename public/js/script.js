@@ -59,7 +59,7 @@
             },
         },
         watch: {
-            id: requestActiveImage,
+            modalActive: requestActiveImage,
         },
         created() {
             var self = this;
@@ -98,7 +98,22 @@
                     console.log(err);
                 });
         },
-        methods: {},
+        methods: {
+            handlePost: function (e) {
+                e.preventDefault();
+                var self = this;
+                var input = { data: [this.comment, this.username, this.id] };
+                axios
+                    .post("/comment", input)
+                    .then(function ({ data }) {
+                        console.log(data);
+                        self.comments.unshift(data);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        },
     });
 
     Vue.component("popup", {
@@ -217,8 +232,6 @@
                 this.modalActive = "";
             },
             forgetImage: function (id) {
-                console.log(this.images[0].id);
-                console.log(id);
                 for (var i in this.images) {
                     if (this.images[i].id == id) {
                         this.images.splice(i, 1);
@@ -233,10 +246,14 @@
         axios
             .get("/active-image/" + this.id)
             .then(function ({ data }) {
-                self.previous = data[0].prevId;
-                self.next = data[0].nextId;
-                self.image = data[0];
-                location.hash = data[0].id;
+                if (data[0]) {
+                    self.previous = data[0].prevId;
+                    self.next = data[0].nextId;
+                    self.image = data[0];
+                    location.hash = data[0].id;
+                } else {
+                    self.$emit("close");
+                }
             })
             .catch(function (err) {
                 console.log(err);

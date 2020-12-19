@@ -47,7 +47,7 @@
                 <a :href="'#' + image.id" v-for="image in images">
                     <div class="card">
                         <img :src="image.url" :alt="image.title" />
-                        <div class="description">{{ image.title }}</div>
+                        <div>{{ image.title }}</div>
                     </div>
                 </a>
             </div>
@@ -61,7 +61,12 @@
                 </button>
             </div>
 
-            <modal v-if="modalActive" :id="modalActive" @close="hideModal" @forget="forgetImage(modalActive)">
+            <modal
+                v-if="modalActive"
+                :id="modalActive"
+                @close="hideModal"
+                @forget="forgetImage(modalActive)"
+            >
             </modal>
         </main>
 
@@ -72,7 +77,7 @@
                     <h3>{{ image.title }}</h3>
                     <p>{{ image.description }}</p>
                     <p class="user-info">uploaded by {{ image.username }} on {{ image.time }}</p>
-                    <comments :id="modalActive"></comments>
+                    <comments :id="id"></comments>
                     <h4 class="modal-button" @click="closeModal">Close</h4>
                     <h4 class="modal-button" @click="prevImage" v-if="previous">Previous</h4>
                     <h4 class="modal-button" @click="nextImage" v-if="next">Next</h4>
@@ -83,7 +88,24 @@
         </script>
 
         <script id="comment-template" type="text/x-template">
-            <div class="comment-container">comments</div>
+            <div>
+                <form method="POST" action="/comment">
+                    <div class="form-row">
+                        Comment
+                        <input name="title" type="text" v-model="comment"/>
+                        Username
+                        <input name="username" type="text" v-model="username"/>
+                    </div>
+                    <button @click="handlePost">Post comment</button>
+                </form>
+                <div class="comment-container">
+                    <h3>Previous comments</h3>
+                    <div class="comment-card" v-for="comment     in comments">
+                        <div>{{ comment.comment }}</div>
+                        <p class="user-info">posted by {{ comment.username }} on {{ comment.time }}</p>
+                    </div>
+                </div>
+            </div>
         </script>
 
         <script id="popup-template" type="text/x-template">

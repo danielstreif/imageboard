@@ -29,6 +29,13 @@ const uploader = multer({
     },
 });
 
+app.use(
+    express.urlencoded({
+        extended: true,
+    }),
+    express.json()
+);
+
 app.get("/images", (req, res) => {
     db.getImages()
         .then(({ rows }) => {
@@ -85,6 +92,23 @@ app.get("/comments/*", (req, res) => {
                 rows[i].time = rows[i].created_at.toLocaleString();
             }
             res.json(rows);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({ success: false });
+        });
+});
+
+app.post("/comment", (req, res) => {
+    const { data } = req.body;
+    const output = {};
+    db.addComment(data)
+        .then(({ rows }) => {
+            output.id = rows[0].id;
+            output.time = rows[0].created_at.toLocaleString();
+            output.comment = data[0];
+            output.username = data[1];
+            res.json(output);
         })
         .catch((err) => {
             console.log(err);
