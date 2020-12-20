@@ -85,19 +85,10 @@
                 comments: [],
                 username: "",
                 comment: "",
+                active: "",
             };
         },
-        mounted: function () {
-            var self = this;
-            axios
-                .get("/comments/" + this.id)
-                .then(function ({ data }) {
-                    self.comments = data;
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
-        },
+        mounted: requestComments,
         methods: {
             handlePost: function (e) {
                 e.preventDefault();
@@ -106,13 +97,33 @@
                 axios
                     .post("/comment", input)
                     .then(function ({ data }) {
-                        console.log(data);
                         self.comments.unshift(data);
+                        self.active = true;
+                        self.username = "";
+                        self.comment = "";
                     })
                     .catch(function (err) {
                         console.log(err);
                     });
             },
+            deleteComment: function (id) {
+                var self = this;
+                axios
+                    .get("/comment-delete/" + id)
+                    .then(function () {
+                        for (var i in self.comments) {
+                            if (self.comments[i].id == id) {
+                                self.comments.splice(i, 1);
+                            }
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        },
+        watch: {
+            id: requestComments,
         },
     });
 
@@ -153,8 +164,6 @@
     new Vue({
         el: "main",
         data: {
-            headingUpload: "Upload your favorite forest image",
-            headingImages: "Gallery",
             fileLabel: "Choose a file",
             images: [],
             title: "",
@@ -202,6 +211,11 @@
                     .post("/upload", formData)
                     .then(function ({ data }) {
                         self.images.unshift(data);
+                        self.title = "";
+                        self.description = "";
+                        self.username = "";
+                        self.image = "";
+                        self.fileLabel = "Choose a file";
                     })
                     .catch(function (err) {
                         console.log(err);
@@ -258,6 +272,24 @@
             .catch(function (err) {
                 console.log(err);
                 self.$emit("close");
+            });
+    }
+
+    function requestComments() {
+        var self = this;
+        axios
+            .get("/comments/" + this.id)
+            .then(function ({ data }) {
+                if (data.length > 0) {
+                    self.comments = data;
+                    self.active = true;
+                } else {
+                    self.active = "";
+                    self.comments = [];
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
             });
     }
 })();

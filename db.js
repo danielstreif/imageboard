@@ -49,7 +49,8 @@ exports.getSingleImage = (id) => {
 exports.getComments = (id) => {
     return db.query(
         `SELECT * FROM comments
-    WHERE image_id = $1`,
+    WHERE image_id = $1
+    ORDER BY id DESC`,
         [id]
     );
 };
@@ -61,6 +62,10 @@ exports.addComment = (params) => {
     RETURNING id, created_at`,
         params
     );
+};
+
+exports.deleteComment = (id) => {
+    return db.query(`DELETE FROM comments WHERE id = $1`, [id]);
 };
 
 exports.uploadImage = (params) => {

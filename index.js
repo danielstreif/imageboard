@@ -114,6 +114,17 @@ app.post("/comment", (req, res) => {
         });
 });
 
+app.get("/comment-delete/:id", (req, res) => {
+    db.deleteComment(req.params.id)
+        .then(() => {
+            res.json({ success: true });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({ success: false });
+        });
+});
+
 app.post("/upload", uploader.single("image"), s3.upload, (req, res) => {
     if (req.file) {
         const data = req.body;
