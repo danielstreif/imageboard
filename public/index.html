@@ -98,15 +98,15 @@
             <div>
                 <h3>Leave a comment</h3>
                 <form method="POST" action="/comment">
-                    <div class="comment-container">
+                    <div class="input-container">
                         Comment
                         <input name="title" type="text" v-model="comment"/>
                         Username
                         <input name="username" type="text" v-model="username"/>
                     </div>
-                    <button class="comment-button" @click="handlePost">Post comment</button>
+                    <button class="input-button" @click="handlePost">Post comment</button>
                 </form>
-                <div>
+                <div class="comment-container">
                     <h3>Previous comments</h3>
                     <div class="comment-card" v-for="comment     in comments">
                         <div>{{ comment.comment }}</div>

@@ -13,7 +13,7 @@ const s3 = new aws.S3({
     secretAccessKey: secrets.AWS_SECRET,
 });
 
-module.exports.upload = (req, res, next) => {
+exports.upload = (req, res, next) => {
     const { filename, mimetype, size, path } = req.file;
 
     const promise = s3
@@ -35,5 +35,30 @@ module.exports.upload = (req, res, next) => {
         .catch((err) => {
             console.log(err);
             res.sendStatus(404);
+        });
+};
+
+exports.delete = (filename) => {
+    const params = {
+        Bucket: "spicedimageboardbucket",
+        Key: filename,
+    };
+
+    const promise = s3
+        .deleteObject(params, (err, data) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(data);
+            }
+        })
+        .promise();
+
+    promise
+        .then(() => {
+            console.log("successfully deleted image");
+        })
+        .catch((err) => {
+            console.log(err);
         });
 };

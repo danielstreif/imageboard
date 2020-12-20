@@ -73,5 +73,9 @@ exports.uploadImage = (params) => {
 };
 
 exports.deleteImage = (id) => {
-    return db.query(`DELETE FROM images WHERE id = $1`, [id]);
+    return db.query(
+        `DELETE FROM images WHERE id = $1
+    RETURNING url`,
+        [id]
+    );
 };

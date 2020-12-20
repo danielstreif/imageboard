@@ -47,9 +47,8 @@ app.get("/images", (req, res) => {
         });
 });
 
-app.get("/request-more/*", (req, res) => {
-    const id = req.params[0];
-    db.getMoreImages(id)
+app.get("/request-more/:id", (req, res) => {
+    db.getMoreImages(req.params.id)
         .then(({ rows }) => {
             res.json(rows);
         })
@@ -59,9 +58,8 @@ app.get("/request-more/*", (req, res) => {
         });
 });
 
-app.get("/active-image/*", (req, res) => {
-    const id = req.params[0];
-    db.getSingleImage(id)
+app.get("/active-image/:id", (req, res) => {
+    db.getSingleImage(req.params.id)
         .then(({ rows }) => {
             rows[0].time = rows[0].created_at.toLocaleString();
             res.json(rows);
@@ -72,10 +70,11 @@ app.get("/active-image/*", (req, res) => {
         });
 });
 
-app.get("/delete-image/*", (req, res) => {
-    const id = req.params[0];
-    db.deleteImage(id)
-        .then(() => {
+app.get("/delete-image/:id", (req, res) => {
+    db.deleteImage(req.params.id)
+        .then(({ rows }) => {
+            const filename = rows[0].url.replace(s3Url, "");
+            s3.delete(filename);
             res.json({ success: true });
         })
         .catch((err) => {
@@ -84,9 +83,8 @@ app.get("/delete-image/*", (req, res) => {
         });
 });
 
-app.get("/comments/*", (req, res) => {
-    const id = req.params[0];
-    db.getComments(id)
+app.get("/comments/:id", (req, res) => {
+    db.getComments(req.params.id)
         .then(({ rows }) => {
             for (let i in rows) {
                 rows[i].time = rows[i].created_at.toLocaleString();
