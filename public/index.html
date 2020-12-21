@@ -45,7 +45,9 @@
                         @change="handleFileChange"
                     />
                     <label for="image">{{ fileLabel }}</label>
-                    <button class="upload-button" @click="handleUpload">Upload</button>
+                    <button class="upload-button" @click="handleUpload">
+                        Upload
+                    </button>
                 </div>
             </form>
 
@@ -81,9 +83,6 @@
             <div class="modal" @click.self="closeModal">
                 <div class="modal-card">
                     <img :src="image.url" :alt="image.title">
-                    <h3>{{ image.title }}</h3>
-                    <p>{{ image.description }}</p>
-                    <p class="user-info">uploaded by {{ image.username }} on {{ image.time }}</p>
                     <div class="button-container">
                         <h4 class="modal-button" @click="prevImage" v-if="previous"><</h4>
                         <h4 class="modal-button hidden-button" v-else></h4>
@@ -92,6 +91,9 @@
                         <h4 class="modal-button" @click="nextImage" v-if="next">></h4>
                         <h4 class="modal-button hidden-button" v-else></h4>
                     </div>
+                    <h3>{{ image.title }}</h3>
+                    <p>{{ image.description }}</p>
+                    <p class="user-info">uploaded by {{ image.username }} on {{ image.time }}</p>
                     <comments :id="id"></comments>
                 </div>
                 <popup v-if="deleteId" :id="deleteId" @close="hidePopup" @deleted="forgetModal"></popup>

@@ -161,7 +161,7 @@ input {
 .modal-card img {
     width: 100%;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     object-fit: cover;
 }
 
